@@ -1,21 +1,32 @@
 const express = require("express");
 
+const { celebrate, Segments, Joi } = require("celebrate");
+
 const OngController = require("./controllers/OngController");
 const IncidentController = require("./controllers/IncidentController");
 const ProfileController = require("./controllers/ProfileController");
 const SessionController = require("./controllers/SessionController");
 
+const SessionValidator = require("./validators/SessionValidator");
+const ProfileValidator = require("./validators/ProfileValidator");
+const IncidentValidator = require("./validators/IncidentValidator");
+const OngValidator = require("./validators/OngValidator");
+
 const routes = express.Router();
 
-routes.post("/sessions", SessionController.create);
+routes.post("/sessions", SessionValidator.create, SessionController.create);
 
 routes.get("/ongs", OngController.index);
-routes.post("/ongs", OngController.create);
+routes.post("/ongs", OngValidator.create, OngController.create);
 
-routes.get("/profile", ProfileController.index);
+routes.get("/profile", ProfileValidator.index, ProfileController.index);
 
-routes.get("/incidents", IncidentController.index);
-routes.post("/incidents", IncidentController.create);
-routes.delete("/incidents/:id", IncidentController.delete);
+routes.get("/incidents", IncidentValidator.index, IncidentController.index);
+routes.post("/incidents", IncidentValidator.create, IncidentController.create);
+routes.delete(
+	"/incidents/:id",
+	IncidentValidator.delete,
+	IncidentController.delete
+);
 
 module.exports = routes;
